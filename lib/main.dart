@@ -14,19 +14,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'CCSC: The Student Showcase',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.blue,
-        // This makes the visual density adapt to the platform that you run
-        // the app on. For desktop platforms, the controls will be smaller and
-        // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: MyHomePage(title: 'CCSC Student Showcase Home Page'),
@@ -52,7 +40,62 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
+var nametext = "john snow";
+var project = "robot dog";
+var vidPath = 'videos/nbheyvid.mp4';
+List comments = [
+  [
+    Container(
+      padding: EdgeInsets.all(1),
+    )
+  ],
+  [Container(padding: EdgeInsets.all(1))],
+  [Container(padding: EdgeInsets.all(1))],
+  [Container(padding: EdgeInsets.all(1))]
+];
+
 class _MyHomePageState extends State<MyHomePage> {
+  TextEditingController commentController = new TextEditingController();
+  List<Widget> displayedComments = comments[0];
+  List comentsSwitcher(int buttonNumber) {
+    return (comments[(buttonNumber - 1)]);
+  }
+
+  void addComment() {
+    Container comentItem = new Container(
+        height: 100,
+        width: 200,
+        child: Column(children: [Text(commentController.text)]));
+    displayedComments.add(comentItem);
+  }
+
+  void updateText(int buttonNumber) {
+    if (buttonNumber == 1) {
+      nametext = "john snow";
+      project = "robot dog";
+      vidPath = 'videos/nbheyvid.mp4';
+      displayedComments = comentsSwitcher(1);
+    }
+    if (buttonNumber == 2) {
+      nametext = "Elmo Sesami";
+      project = "robot doll";
+      vidPath = 'videos/telmo.mp4';
+      displayedComments = comentsSwitcher(2);
+    }
+    if (buttonNumber == 3) {
+      nametext = "Diana Troy";
+      project = "Porygon";
+      vidPath = 'videos/jumjum.mp4';
+      displayedComments = comentsSwitcher(3);
+    }
+    if (buttonNumber == 4) {
+      nametext = "Kalem chirpi";
+      project = "iron keys and you";
+      vidPath = 'videos/flumdum.mp4';
+      displayedComments = comentsSwitcher(4);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,25 +105,38 @@ class _MyHomePageState extends State<MyHomePage> {
         body: Center(
             child: Column(children: [
           Padding(padding: EdgeInsets.only(top: 70)),
-          Column(children: [
-            Text('Student Names: John Snow'),
-            Text('Project Name: robo-dog dartboard')
-          ]),
+          Column(children: [Text(nametext), Text(project)]),
           Container(padding: EdgeInsets.only(top: 55)),
           Row(
             children: [
               Padding(padding: EdgeInsets.only(left: 150)),
               Container(padding: EdgeInsets.only(left: 12)),
-              Placeholder(
-                  color: Colors.black, fallbackHeight: 500, fallbackWidth: 300),
+              Container(
+                  height: 500,
+                  width: 200,
+                  child: Column(
+                    children: [
+                      ListView(
+                        key: UniqueKey(),
+                        shrinkWrap: true,
+                        padding: EdgeInsets.all(8),
+                        children: displayedComments,
+                      ),
+                      TextField(
+                        controller: commentController,
+                      ),
+                      RaisedButton(
+                          onPressed: () => setState(() => addComment()),
+                          child: Text("submit comment"))
+                    ],
+                  )),
               Padding(padding: EdgeInsets.only(left: 50)),
               Container(
                   height: 500,
                   width: 900,
                   child: ChewieListItem(
-                    videoPlayerController: VideoPlayerController.asset(
-                      'videos/nbheyvid.mp4',
-                    ),
+                    key: UniqueKey(),
+                    videoPlayerController: VideoPlayerController.asset(vidPath),
                     looping: true,
                   )),
               Padding(padding: EdgeInsets.only(left: 50)),
@@ -97,7 +153,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           child: SizedBox(
                             height: 30,
                             child: RaisedButton(
-                              onPressed: () {},
+                              onPressed: () => setState(() => updateText(2)),
                               child: const Text(
                                 'Robot dolls',
                                 style: TextStyle(fontSize: 20),
@@ -111,7 +167,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           child: SizedBox(
                             height: 30,
                             child: RaisedButton(
-                              onPressed: () {},
+                              onPressed: () => setState(() => updateText(3)),
                               child: const Text(
                                 'Porygon',
                                 style: TextStyle(fontSize: 20),
@@ -125,7 +181,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           child: SizedBox(
                             height: 30,
                             child: RaisedButton(
-                              onPressed: () {},
+                              onPressed: () => setState(() => updateText(4)),
                               child: const Text(
                                 'iron keys and you',
                                 style: TextStyle(fontSize: 20),
@@ -139,9 +195,9 @@ class _MyHomePageState extends State<MyHomePage> {
                           child: SizedBox(
                             height: 30,
                             child: RaisedButton(
-                              onPressed: () {},
+                              onPressed: () => setState(() => updateText(1)),
                               child: const Text(
-                                'Robo-dog dartboard',
+                                'Robot dog',
                                 style: TextStyle(fontSize: 20),
                               ),
                             ),
